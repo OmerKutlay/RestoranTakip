@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RestoranTakip.Data;
 
@@ -11,9 +12,11 @@ using RestoranTakip.Data;
 namespace RestoranTakip.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240829233850_UserModelEklendi")]
+    partial class UserModelEklendi
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +24,6 @@ namespace RestoranTakip.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("AppUserTable", b =>
-                {
-                    b.Property<int>("AppUsersId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TablesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("AppUsersId", "TablesId");
-
-                    b.HasIndex("TablesId");
-
-                    b.ToTable("AppUserTable");
-                });
 
             modelBuilder.Entity("RestoranTakip.Models.AppUser", b =>
                 {
@@ -179,6 +167,9 @@ namespace RestoranTakip.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("AppUserId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
@@ -194,22 +185,47 @@ namespace RestoranTakip.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AppUserId");
+
                     b.ToTable("Tables");
                 });
 
-            modelBuilder.Entity("AppUserTable", b =>
+            modelBuilder.Entity("RestoranTakip.Models.Waiter", b =>
                 {
-                    b.HasOne("RestoranTakip.Models.AppUser", null)
-                        .WithMany()
-                        .HasForeignKey("AppUsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.HasOne("RestoranTakip.Models.Table", null)
-                        .WithMany()
-                        .HasForeignKey("TablesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Waiters");
+                });
+
+            modelBuilder.Entity("TableWaiter", b =>
+                {
+                    b.Property<int>("TablesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WaitersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TablesId", "WaitersId");
+
+                    b.HasIndex("WaitersId");
+
+                    b.ToTable("TableWaiter");
                 });
 
             modelBuilder.Entity("RestoranTakip.Models.Order", b =>
@@ -246,9 +262,33 @@ namespace RestoranTakip.Data.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("RestoranTakip.Models.Table", b =>
+                {
+                    b.HasOne("RestoranTakip.Models.AppUser", null)
+                        .WithMany("Tables")
+                        .HasForeignKey("AppUserId");
+                });
+
+            modelBuilder.Entity("TableWaiter", b =>
+                {
+                    b.HasOne("RestoranTakip.Models.Table", null)
+                        .WithMany()
+                        .HasForeignKey("TablesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RestoranTakip.Models.Waiter", null)
+                        .WithMany()
+                        .HasForeignKey("WaitersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("RestoranTakip.Models.AppUser", b =>
                 {
                     b.Navigation("Orders");
+
+                    b.Navigation("Tables");
                 });
 
             modelBuilder.Entity("RestoranTakip.Models.Order", b =>

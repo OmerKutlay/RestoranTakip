@@ -23,6 +23,6 @@ namespace RestoranTakip.Data
         public virtual DbSet<OrderDetail> OrderDetails { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Table> Tables { get; set; }
-        public virtual DbSet<Waiter> Waiters { get; set; }
+        public virtual DbSet<AppUser> AppUsers { get; set; }
     }
 }
