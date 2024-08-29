@@ -9,5 +9,6 @@ namespace RestoranTakip.Models
     public class Product:BaseModel
     {
         public decimal Price { get; set; }
+        public ICollection<OrderDetail> OrderDetails { get; set; }
     }
 }

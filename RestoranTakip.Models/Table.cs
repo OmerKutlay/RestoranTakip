@@ -8,6 +8,8 @@ namespace RestoranTakip.Models
 {
     public class Table:BaseModel
     {
-       public virtual ICollection<Waiter> Waiters { get; set; }
+        public bool IsOccupied { get; set; }
+        public virtual ICollection<Waiter> Waiters { get; set; }
+        public ICollection<Order> Orders { get; set; }
     }
 }
