@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35122.118
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestoranTakip.Web", "RestoranTakip.Web\RestoranTakip.Web.csproj", "{4DEDBFD9-452F-443D-8624-02498967DA38}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestoranTakip.Web", "RestoranTakip.Web\RestoranTakip.Web.csproj", "{4DEDBFD9-452F-443D-8624-02498967DA38}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestoranTakip.Models", "RestoranTakip.Models\RestoranTakip.Models.csproj", "{430693C7-3053-474C-944D-E2268A89606B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestoranTakip.Data", "RestoranTakip.Data\RestoranTakip.Data.csproj", "{F1834FEA-2BB2-4FB0-B6FD-99C1A6385CCA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{4DEDBFD9-452F-443D-8624-02498967DA38}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4DEDBFD9-452F-443D-8624-02498967DA38}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4DEDBFD9-452F-443D-8624-02498967DA38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{430693C7-3053-474C-944D-E2268A89606B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{430693C7-3053-474C-944D-E2268A89606B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{430693C7-3053-474C-944D-E2268A89606B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{430693C7-3053-474C-944D-E2268A89606B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1834FEA-2BB2-4FB0-B6FD-99C1A6385CCA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1834FEA-2BB2-4FB0-B6FD-99C1A6385CCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1834FEA-2BB2-4FB0-B6FD-99C1A6385CCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1834FEA-2BB2-4FB0-B6FD-99C1A6385CCA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
