@@ -9,10 +9,11 @@ namespace RestoranTakip.Models
     public class Order:BaseModel
     {
         public decimal TotalAmount { get; set; }
-        public int AppUserId { get; set; }
-        public int TableId { get; set; }
         public DateTime OrderDate { get; set; }
-
+        public int AppUserId { get; set; }
+        public virtual AppUser AppUser { get; set; }
+        public int TableId { get; set; }
+        public virtual Table Table { get; set; }
         public ICollection<OrderDetail> OrderDetails { get; set; }
        
     }

@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestoranTakip.Web", "Restor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestoranTakip.Models", "RestoranTakip.Models\RestoranTakip.Models.csproj", "{430693C7-3053-474C-944D-E2268A89606B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestoranTakip.Data", "RestoranTakip.Data\RestoranTakip.Data.csproj", "{F1834FEA-2BB2-4FB0-B6FD-99C1A6385CCA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestoranTakip.Data", "RestoranTakip.Data\RestoranTakip.Data.csproj", "{F1834FEA-2BB2-4FB0-B6FD-99C1A6385CCA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
