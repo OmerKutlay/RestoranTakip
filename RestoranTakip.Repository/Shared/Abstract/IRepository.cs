@@ -13,10 +13,8 @@ namespace RestoranTakip.Repository.Shared.Abstract
         IQueryable<T> GetAll(Expression<Func<T, bool>> predicate);
         T GetById(int id);
         T Add(T entity);
-        void Delete(int id);
+        void Deleted(int id);
         List<T> AddRange(List<T> entities);
         T GetFirstOrDefault(Expression<Func<T, bool>> predicate);
-        void Save();
-        T Update(T entity);
     }
 }
