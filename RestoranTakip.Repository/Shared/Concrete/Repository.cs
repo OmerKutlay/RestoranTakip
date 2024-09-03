@@ -36,7 +36,7 @@ namespace RestoranTakip.Repository.Shared.Concrete
             return entities;
         }
 
-        public void Deleted(int id)
+        public void Delete(int id)
         {
             T entity = _dbSet.Find(id);
             entity.IsDeleted = true;
