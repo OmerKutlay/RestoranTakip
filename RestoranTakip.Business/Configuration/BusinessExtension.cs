@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using RestoranTakip.Business.Abstract;
+using RestoranTakip.Business.Concrete;
 using RestoranTakip.Repository.Shared.Abstract;
 using RestoranTakip.Repository.Shared.Concrete;
 using System;

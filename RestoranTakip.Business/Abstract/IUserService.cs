@@ -1,4 +1,4 @@
-﻿using Microsoft.PowerBI.Api.Models;
+﻿using RestoranTakip.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +13,6 @@ namespace RestoranTakip.Business.Abstract
         AppUser Update(AppUser appuser);
         bool Delete(int UserId);
         AppUser CheckUser(string username, string password);
+        IQueryable<AppUser> GetAll();
     }
 }
