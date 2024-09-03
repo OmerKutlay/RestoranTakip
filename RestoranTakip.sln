@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestoranTakip.Models", "Res
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestoranTakip.Data", "RestoranTakip.Data\RestoranTakip.Data.csproj", "{F1834FEA-2BB2-4FB0-B6FD-99C1A6385CCA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestoranTakip.Repository", "RestoranTakip.Repository\RestoranTakip.Repository.csproj", "{FBE2EDD9-BB01-46D3-B9E3-AA1E7FAF12E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestoranTakip.Repository", "RestoranTakip.Repository\RestoranTakip.Repository.csproj", "{FBE2EDD9-BB01-46D3-B9E3-AA1E7FAF12E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestoranTakip.Business", "RestoranTakip.Business\RestoranTakip.Business.csproj", "{8122980C-C259-4D8C-9A4C-CF3DB4083079}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{FBE2EDD9-BB01-46D3-B9E3-AA1E7FAF12E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FBE2EDD9-BB01-46D3-B9E3-AA1E7FAF12E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FBE2EDD9-BB01-46D3-B9E3-AA1E7FAF12E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8122980C-C259-4D8C-9A4C-CF3DB4083079}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8122980C-C259-4D8C-9A4C-CF3DB4083079}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8122980C-C259-4D8C-9A4C-CF3DB4083079}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8122980C-C259-4D8C-9A4C-CF3DB4083079}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
