@@ -1,23 +1,25 @@
 using Microsoft.AspNetCore.Mvc;
+using RestoranTakip.Data;
 using RestoranTakip.Web.Models;
 using System.Diagnostics;
 
 namespace RestoranTakip.Web.Controllers
 {
-    public class HomeController : Controller
+    
+    public class deneme : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+
+        public  deneme(ApplicationDbContext context)
         {
-            _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
         {
             return View();
         }
-
         public IActionResult Privacy()
         {
             return View();

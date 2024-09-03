@@ -11,7 +11,7 @@ namespace RestoranTakip.Business.Abstract
     {
         AppUser Add(AppUser appuser);
         AppUser Update(AppUser appuser);
-        bool Delete(AppUser appuser);
+        bool Delete(int UserId);
         AppUser CheckUser(string username, string password);
     }
 }
