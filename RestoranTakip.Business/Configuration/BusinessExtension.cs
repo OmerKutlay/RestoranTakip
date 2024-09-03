@@ -12,7 +12,7 @@ namespace RestoranTakip.Business.Configuration
 {
     public static class BusinessExtension
     {
-        public static void BusineessDI(this IServiceCollection services)
+        public static void BusinessDI(this IServiceCollection services)
         {
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ITableService, TableService>();

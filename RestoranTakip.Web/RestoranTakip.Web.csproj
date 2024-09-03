@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\RestoranTakip.Business\RestoranTakip.Business.csproj" />
     <ProjectReference Include="..\RestoranTakip.Data\RestoranTakip.Data.csproj" />
   </ItemGroup>
 

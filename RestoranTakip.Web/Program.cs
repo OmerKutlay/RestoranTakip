@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using RestoranTakip.Business.Configuration;
 using RestoranTakip.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,6 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(option=>option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.RepositoryDI();
+builder.Services.BusinessDI();
 
 var app = builder.Build();
 
