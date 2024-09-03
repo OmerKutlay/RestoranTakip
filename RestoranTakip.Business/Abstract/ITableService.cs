@@ -12,7 +12,7 @@ namespace RestoranTakip.Business.Abstract
         Table Add(Table table);
         Table Update(Table table);
         Table Delete(int TableId);
-        ICollection<Table> GetAll();
+        IQueryable<Table> GetAll();
 
     }
 }
