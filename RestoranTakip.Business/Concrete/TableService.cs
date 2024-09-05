@@ -1,4 +1,5 @@
-﻿using RestoranTakip.Business.Abstract;
+﻿using Microsoft.EntityFrameworkCore;
+using RestoranTakip.Business.Abstract;
 using RestoranTakip.Models;
 using RestoranTakip.Repository.Shared.Abstract;
 using System;
@@ -29,9 +30,9 @@ namespace RestoranTakip.Business.Concrete
             return true;
         }
 
-        public IQueryable<Table> GetAll()
+        public IQueryable<Table> GetAll(int UserId)
         {
-            return _tableRepository.GetAll(c => !c.IsDeleted);
+            return _tableRepository.GetAll(t => t.AppUsers.Any(u => u.Id == UserId)).Include(c => c.AppUsers);
         }
 
         public Table Update(Table table)
