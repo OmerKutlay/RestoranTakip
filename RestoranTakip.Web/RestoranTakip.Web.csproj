@@ -18,6 +18,8 @@
   <ItemGroup>
     <ProjectReference Include="..\RestoranTakip.Business\RestoranTakip.Business.csproj" />
     <ProjectReference Include="..\RestoranTakip.Data\RestoranTakip.Data.csproj" />
+    <ProjectReference Include="..\RestoranTakip.Models\RestoranTakip.Models.csproj" />
+    <ProjectReference Include="..\RestoranTakip.Repository\RestoranTakip.Repository.csproj" />
   </ItemGroup>
 
 </Project>
