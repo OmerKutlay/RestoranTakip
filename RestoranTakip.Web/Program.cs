@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using RestoranTakip.Business.Configuration;
 using RestoranTakip.Data;
@@ -10,6 +11,14 @@ builder.Services.AddDbContext<ApplicationDbContext>(option=>option.UseSqlServer(
 
 builder.Services.RepositoryDI();
 builder.Services.BusinessDI();
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+{
+    options.AccessDeniedPath = "";
+    options.Cookie.Name = "RestoranTakipCookie";
+    options.LoginPath = "/User/Login";
+});
+
 
 var app = builder.Build();
 
@@ -26,6 +35,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
