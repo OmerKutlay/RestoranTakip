@@ -28,6 +28,11 @@ namespace RestoranTakip.Business.Concrete
             return true;
         }
 
+        public IQueryable<Product> GetAll(OrderDetail orderDetail)
+        {
+            return _productRepository.GetAll(p => p.OrderDetails == orderDetail);
+        }
+
         public IQueryable<Product> GetAll()
         {
             return _productRepository.GetAll(p => !p.IsDeleted);
@@ -38,7 +43,7 @@ namespace RestoranTakip.Business.Concrete
             return _productRepository.GetById(id);
         }
 
-        public Product Update(Product product)
+        public Product Update(Product  product)
         {
             return _productRepository.Update(product);
         }
