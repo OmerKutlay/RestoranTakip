@@ -11,7 +11,7 @@ namespace RestoranTakip.Business.Abstract
     {
         Order Add(Order order, List<OrderDetail> orderDetails);
         Order Update(Order order, List<OrderDetail> orderDetails);
-        Order UpdateAttendees(int orderId, List<OrderDetail> orderDetails);
+        Order UpdateDetails(int orderId, List<OrderDetail> orderDetails);
         bool Delete(int orderId);
         ICollection<Order> GetAll(int tableId);
         Order GetById(int orderId);

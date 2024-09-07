@@ -56,7 +56,7 @@ namespace RestoranTakip.Business.Concrete
             return _orderRepository.Update(order);
         }
 
-        public Order UpdateAttendees(int orderId, List<OrderDetail> orderDetails)
+        public Order UpdateDetails(int orderId, List<OrderDetail> orderDetails)
         {
             Order order = _orderRepository.GetById(orderId);
             order.OrderDetails = orderDetails;
