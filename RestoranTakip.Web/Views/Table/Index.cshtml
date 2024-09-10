@@ -1,0 +1,134 @@
+﻿<div class="row">
+    <div class="col-12">
+
+        <div class="card">
+            <div class="card-header bg-gradient-success text-white">
+                <div class="row">
+                    <div class="col-11"><box-icon name="dining" color="white" size="sm" animation="tada"></box-icon> Masalar</div>
+                    <div class="col-1 text-end"><a id="btnAdd" href="#" class="btn btn-outline-dark">+ Yeni Masa</a></div>
+                </div>
+            </div>
+            <div class="card-body">
+                <table id="tblTables" class="table table-hovered table-striped table-bordered"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* MODAL *@
+<div class="modal fade" id="modal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3 row">
+                    <label class="form-label">Masa Adı: </label>
+                    <input type="text" id="txtTableName" placeholder="Lütfen masa adı giriniz" class="form-control" required />
+                </div>
+                <div class="mb-3 row">
+                    <label class="form-label">Masa Durumu: </label>
+                    <input type="checkbox" id="chkIsOccupied" /> Dolu
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                <button type="button" id="btnSave" class="btn btn-primary"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var DataTable = "";
+
+        $(document).ready(() => {
+
+            $("#btnAdd").click(() => {
+                $("#modal").modal("show");
+                $("#btnSave").text("Kaydet");
+                $("#modalTitle").text("Yeni Masa Ekle");
+                $('#txtTableName').val('');
+                $('#chkIsOccupied').prop('checked', false);
+
+                $("#btnSave").off().click(() => {
+                    $.ajax({
+                        url: '/Table/Add',
+                        type: 'POST',
+                        data: {
+                            table: {
+                                name: $("#txtTableName").val(),
+                                isOccupied: $("#chkIsOccupied").is(':checked')
+                            }
+                        },
+                        success: (res) => {
+                            $("#modal").modal("hide");
+                            DataTable.row.add(res).draw(false);
+                        }
+                    });
+                });
+            });
+
+            DataTable = $("#tblTables").DataTable({
+                ajax: '/Table/GetAll',
+                columns: [
+                    { data: 'id', title: 'ID' },
+                    { data: 'name', title: 'Masa Adı' },
+                    { data: 'isOccupied', title: 'Durum', render: (data) => data ? 'Dolu' : 'Boş' },
+                    {
+                        data: 'id', title: 'İşlemler', render: (data) => {
+                            return `<a onclick="deleteTable(${data},this)" class="me-4" title="Sil" href="#"><box-icon name="trash-alt" color="red" size="sm" class="bx-burst-hover"></box-icon></a>
+                                            <a onclick="updateTable(${data},this)" title="Düzenle" href="#"><box-icon class="bx-burst-hover" name="pencil" color="blue" size="sm"></box-icon></a>`;
+                        }
+                    }
+                ]
+            });
+        });
+
+        function deleteTable(tableId, button) {
+            if (confirm("Silmek istediğinize emin misiniz?")) {
+                $.ajax({
+                    url: '/Table/Delete',
+                    type: 'POST',
+                    data: { id: tableId },
+                    success: () => {
+                        let satir = $(button).parent().parent();
+                        DataTable.row(satir).remove().draw(false);
+                    }
+                });
+            }
+        }
+
+        function updateTable(tableId, button) {
+            $.ajax({
+                url: '/Table/GetById',
+                type: 'POST',
+                data: { id: tableId },
+                success: (res) => {
+                    $("#modal").modal("show");
+                    $("#txtTableName").val(res.name);
+                    $("#chkIsOccupied").prop('checked', res.isOccupied);
+                    $("#modalTitle").text("Masa Düzenle");
+                    $("#btnSave").text("Güncelle").off().click(() => {
+                        res.name = $("#txtTableName").val();
+                        res.isOccupied = $("#chkIsOccupied").is(':checked');
+
+                        $.ajax({
+                            url: '/Table/Update',
+                            type: 'POST',
+                            data: { table: res },
+                            success: () => {
+                                let satir = $(button).parent().parent();
+                                DataTable.row(satir).data(res).draw(false);
+                                $("#modal").modal("hide");
+                            }
+                        });
+                    });
+                }
+            });
+        }
+    </script>
+}
