@@ -30,9 +30,14 @@ namespace RestoranTakip.Business.Concrete
             return true;
         }
 
-        public IQueryable<Table> GetAll(int UserId)
+        public Table GetById(int id)
         {
-            return _tableRepository.GetAll(t => t.AppUsers.Any(u => u.Id == UserId)).Include(c => c.AppUsers);
+            return _tableRepository.GetById(id);
+        }
+
+        public IQueryable<Table> GetAll()
+        {
+            return _tableRepository.GetAll(t => t.IsDeleted == false);
         }
 
         public Table Update(Table table)

@@ -11,8 +11,9 @@ namespace RestoranTakip.Business.Abstract
     {
         Table Add(Table table);
         Table Update(Table table);
+        Table GetById(int id);
         bool Delete(int TableId);
-        IQueryable<Table> GetAll(int UserId);
+        IQueryable<Table> GetAll();
 
     }
 }
