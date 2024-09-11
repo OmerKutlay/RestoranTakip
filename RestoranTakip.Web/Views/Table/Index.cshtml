@@ -1,6 +1,5 @@
 ﻿<div class="row">
     <div class="col-12">
-
         <div class="card">
             <div class="card-header bg-gradient-success text-white">
                 <div class="row">
@@ -47,6 +46,7 @@
 
         $(document).ready(() => {
 
+            // Yeni masa ekleme işlemi
             $("#btnAdd").click(() => {
                 $("#modal").modal("show");
                 $("#btnSave").text("Kaydet");
@@ -59,10 +59,8 @@
                         url: '/Table/Add',
                         type: 'POST',
                         data: {
-                            table: {
-                                name: $("#txtTableName").val(),
-                                isOccupied: $("#chkIsOccupied").is(':checked')
-                            }
+                            name: $("#txtTableName").val(),
+                            isOccupied: $("#chkIsOccupied").is(':checked')
                         },
                         success: (res) => {
                             $("#modal").modal("hide");
@@ -72,6 +70,7 @@
                 });
             });
 
+            // DataTable yapılandırması
             DataTable = $("#tblTables").DataTable({
                 ajax: '/Table/GetAll',
                 columns: [
@@ -80,28 +79,35 @@
                     { data: 'isOccupied', title: 'Durum', render: (data) => data ? 'Dolu' : 'Boş' },
                     {
                         data: 'id', title: 'İşlemler', render: (data) => {
-                            return `<a onclick="deleteTable(${data},this)" class="me-4" title="Sil" href="#"><box-icon name="trash-alt" color="red" size="sm" class="bx-burst-hover"></box-icon></a>
-                                            <a onclick="updateTable(${data},this)" title="Düzenle" href="#"><box-icon class="bx-burst-hover" name="pencil" color="blue" size="sm"></box-icon></a>`;
+                            return `
+                    <a onclick="updateTable(${data}, this)" title="Düzenle" href="#">
+                        <i class="bi bi-pencil" style="color: blue; font-size: 1.2em;"></i>
+                    </a>
+                    <a onclick="deleteTable(${data}, this)" title="Sil" href="#">
+                        <i class="bi bi-trash" style="color: red; font-size: 1.2em;"></i>
+                    </a>`;
                         }
                     }
                 ]
             });
         });
 
-        function deleteTable(tableId, button) {
+        // Masa silme işlemi
+           function deleteTable(tableId, button) {
             if (confirm("Silmek istediğinize emin misiniz?")) {
                 $.ajax({
-                    url: '/Table/Delete',
+                    url: '/Table/SoftDelete',
                     type: 'POST',
                     data: { id: tableId },
                     success: () => {
-                        let satir = $(button).parent().parent();
-                        DataTable.row(satir).remove().draw(false);
+                        let row = $(button).parent().parent();
+                        DataTable.row(row).remove().draw(false);
                     }
                 });
             }
         }
 
+        // Masa düzenleme işlemi
         function updateTable(tableId, button) {
             $.ajax({
                 url: '/Table/GetById',
@@ -121,8 +127,8 @@
                             type: 'POST',
                             data: { table: res },
                             success: () => {
-                                let satir = $(button).parent().parent();
-                                DataTable.row(satir).data(res).draw(false);
+                                let row = $(button).parent().parent();
+                                DataTable.row(row).data(res).draw(false);
                                 $("#modal").modal("hide");
                             }
                         });
