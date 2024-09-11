@@ -35,6 +35,12 @@ namespace RestoranTakip.Web.Controllers
         }
 
         [HttpPost]
+        public IActionResult GetById(int id)
+            {  
+                return Ok(_productService.GetById(id)); 
+            }
+
+        [HttpPost]
         public IActionResult Update(Product product)
         {
             return Ok(_productService.Update(product));

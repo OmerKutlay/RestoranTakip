@@ -10,7 +10,7 @@ namespace RestoranTakip.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public DateTime DateCreated { get; set; }= DateTime.Now;
+        public DateTime DateCreated { get; set; } = DateTime.Now;
         public bool IsDeleted { get; set; } = false;
 
     }
