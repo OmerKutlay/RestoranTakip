@@ -1,0 +1,144 @@
+﻿<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-gradient-success text-white">
+                <div class="row">
+                    <div class="col-11">
+                        <box-icon name="dining" color="white" size="sm" animation="tada"></box-icon> Ürünler
+                    </div>
+                    <div class="col-1 text-end">
+                        <a id="btnAdd" href="#" class="btn btn-outline-dark">+ Yeni Ürün</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <table id="tblProduct" class="table table-hovered table-striped table-bordered"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* MODAL *@
+<div class="modal fade" id="modal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3 row">
+                    <label class="form-label">Ürün Adı : </label>
+                    <input type="text" id="txtProductName" placeholder="Lütfen ürün adı giriniz" class="form-control" required />
+                </div>
+                <div class="mb-3 row">
+                    <label class="form-label">Ürünün Fiyatı : </label>
+                    <input type="text" id="txtProductPrice" placeholder="Lütfen ürünün fiyatını giriniz" class="form-control" required />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                <button type="button" id="btnSave" class="btn btn-primary"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        var DataTable = "";
+
+        $(document).ready(() => {
+            // Ürün Ekleme Butonu
+            $("#btnAdd").click(() => {
+                $("#modal").modal("show");
+                $("#btnSave").text("Kaydet");
+                $("#modalTitle").text("Yeni Ürün Ekle");
+                $('#txtProductName').val('');
+                $('#txtProductPrice').val('');
+
+                $("#btnSave").off().click(() => {
+                    $.ajax({
+                        url: '/Product/Add',
+                        type: 'POST',
+                        data: {
+                            name: $("#txtProductName").val(),
+                            price: $("#txtProductPrice").val()
+                        },
+                        success: (res) => {
+                            $("#modal").modal("hide");
+                            DataTable.row.add(res).draw(false);
+                        }
+                    });
+                });
+            });
+
+            // DataTable Ayarları
+            DataTable = $("#tblProduct").DataTable({
+                ajax: '/Product/GetAll',
+                columns: [
+                    { data: 'id', title: 'ID' },
+                    { data: 'name', title: 'Ürün Adı' },
+                    { data: 'price', title: 'Ürün Fiyatı' },
+                    {
+    data: 'id', title: 'İşlemler', render: (data) => {
+        return `
+            <a onclick="updateProduct(${data}, this)" title="Düzenle" href="#">
+                <i class="bi bi-pencil" style="color: blue; font-size: 1.2em;"></i>
+            </a>
+            <a onclick="deleteProduct(${data}, this)" title="Sil" href="#">
+                <i class="bi bi-trash" style="color: red; font-size: 1.2em;"></i>
+            </a>`;
+    }
+}
+
+                ]
+            });
+        });
+
+        // Ürün Silme Fonksiyonu
+        function deleteProduct(productId, button) {
+            if (confirm("Silmek istediğinize emin misiniz?")) {
+                $.ajax({
+                    url: '/Product/Delete',
+                    type: 'POST',
+                    data: { id: productId },
+                    success: () => {
+                        let row = $(button).parent().parent();
+                        DataTable.row(row).remove().draw(false);
+                    }
+                });
+            }
+        }
+
+        // Ürün Güncelleme Fonksiyonu
+        function updateProduct(productId, button) {
+            $.ajax({
+                url: '/Product/GetById',
+                type: 'POST',
+                data: { id: productId },
+                success: (res) => {
+                    $("#modal").modal("show");
+                    $("#txtProductName").val(res.name);
+                    $("#txtProductPrice").val(res.price);
+                    $("#modalTitle").text("Ürün Düzenle");
+                    $("#btnSave").text("Güncelle").off().click(() => {
+                        res.name = $("#txtProductName").val();
+                        res.price = $("#txtProductPrice").val();
+
+                        $.ajax({
+                            url: '/Product/Update',
+                            type: 'POST',
+                            data: res,
+                            success: () => {
+                                let row = $(button).parent().parent();
+                                DataTable.row(row).data(res).draw(false);
+                                $("#modal").modal("hide");
+                            }
+                        });
+                    });
+                }
+            });
+        }
+    </script>
+}
