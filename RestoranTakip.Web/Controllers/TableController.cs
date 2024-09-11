@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RestoranTakip.Business.Abstract;
+using RestoranTakip.Business.Concrete;
 using RestoranTakip.Models;
 using System.Security.Claims;
 
@@ -21,13 +22,19 @@ namespace RestoranTakip.Web.Controllers
 
         public IActionResult GetAll()
         {
-            return Json(_tableService.GetAll(int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)));
+            return Json(new { data = _tableService.GetAll() });
         }
 
         [HttpPost]
         public IActionResult Add(Table table)
         {
             return Ok(_tableService.Add(table));
+        }
+
+        [HttpPost]
+        public IActionResult GetById(int id)
+        {
+            return Ok(_tableService.GetById(id));
         }
 
         [HttpPost]
