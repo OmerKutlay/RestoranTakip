@@ -22,6 +22,8 @@
     <!-- DataTables -->
     <link href="~/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
     <link href="~/assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
     @await RenderSectionAsync("Styles", false);
 </head>
 
@@ -330,30 +332,33 @@
                 <!--- Sidemenu -->
                 <div id="sidebar-menu">
                     <!-- Left Menu Start -->
-                    <ul class="metismenu list-unstyled" id="side-menu">
-                        <li class="menu-title">Menu</li>
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                <i class="uil-window-section"></i>
-                                <span>342. satır</span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="true">
-                                <li>
-                                    <a href="" class="">Deneme</a>
-                                   <ul class="sub-new" aria-expended="true">
-                                       <li>
-                                        <i class="uil-datbase"></i>   <a asp-controller="traningCAtegory" asp-action="Index">"denemeler"</a>
-                                       </li>
-                                   </ul>
-                                
-                                </li>
-                                    </ul>
-                                </li>
-                                
-                            </ul>
-                        </li>
+                   
+<ul class="metismenu list-unstyled mm-show" id="side-menu">
+                            
+                            
 
-                    </ul>
+                            <li class="menu-title">Menü</li>
+
+                            <li class="mm-active">
+                                <a href="/product" class="waves-effect active">
+                               <i class="fas fa-pizza-slice"></i>
+                                    <span>Ürünler</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="/table" class=" waves-effect">
+                                <i class="uil-restaurant"></i>
+                                    <span>Masalar</span>
+                                </a>
+                            </li>
+
+                           
+
+                           
+
+                        </ul>
+
                 </div>
                 <!-- Sidebar -->
             </div>
