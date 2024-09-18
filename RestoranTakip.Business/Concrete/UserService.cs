@@ -35,7 +35,7 @@ namespace RestoranTakip.Business.Concrete
 
         public IQueryable<AppUser> GetAll()
         {
-            return _userRepository.GetAll();
+            return _userRepository.GetAll(u => !u.IsDeleted);
         }
 
         public AppUser Update(AppUser appuser)
