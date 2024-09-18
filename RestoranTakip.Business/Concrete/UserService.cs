@@ -42,5 +42,10 @@ namespace RestoranTakip.Business.Concrete
         {
             return _userRepository.Update(appuser);
         }
+
+        public AppUser GetById(int id)
+        {
+            return _userRepository.GetById(id);
+        }
     }
 }
