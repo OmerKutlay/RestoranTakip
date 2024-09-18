@@ -1,0 +1,158 @@
+﻿<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-gradient-success text-white">
+                <div class="row">
+                    <div class="col-11">
+                        <box-icon name="user" color="white" size="sm" animation="tada"></box-icon> Kullanıcılar
+                    </div>
+                    <div class="col-1 text-end">
+                        <a id="btnAdd" href="#" class="btn btn-outline-dark">+ Yeni Kullanıcı</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <table id="tblUser" class="table table-hovered table-striped table-bordered"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal fade" id="modal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3 row">
+                    <label class="form-label">Kullanıcı Adı:</label>
+                    <input type="text" id="txtUsername" placeholder="Lütfen kullanıcı adı giriniz" class="form-control" required />
+                </div>
+                <div class="mb-3 row">
+                    <label class="form-label">Şifre:</label>
+                    <input type="password" id="txtPassword" placeholder="Lütfen şifre giriniz" class="form-control" required />
+                </div>
+                <div class="mb-3 row">
+                    <label class="form-label">Admin mi?</label>
+                    <select id="ddlIsAdmin" class="form-select">
+                        <option value="0">Hayır</option>
+                        <option value="1">Evet</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                <button type="button" id="btnSave" class="btn btn-primary"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var DataTable = "";
+
+        $(document).ready(() => {
+            // Yeni Kullanıcı Ekleme Butonu
+            $("#btnAdd").click(() => {
+                $("#modal").modal("show");
+                $("#btnSave").text("Kaydet");
+                $("#modalTitle").text("Yeni Kullanıcı Ekle");
+                $('#txtUsername').val('');
+                $('#txtPassword').val('');
+                $('#ddlIsAdmin').val('0');
+
+                $("#btnSave").off().click(() => {
+                    $.ajax({
+                        url: '/User/Add',
+                        type: 'POST',
+                        data: {
+                            name: $("#txtUsername").val(),
+                            password: $("#txtPassword").val(),
+                            isAdmin: $("#ddlIsAdmin").val() == 1 ? true : false
+                        },
+                        success: (res) => {
+                            $("#modal").modal("hide");
+                            DataTable.row.add(res).draw(false);
+                        }
+                    });
+                });
+            });
+
+            // DataTable Ayarları
+            DataTable = $("#tblUser").DataTable({
+                ajax: '/User/GetAll',
+                columns: [
+                    { data: 'id', title: 'ID' },
+                    { data: 'name', title: 'Kullanıcı Adı' },
+                    {
+                        data: 'isAdmin', title: 'Admin Mi?',
+                        render: (data) => {
+                            return data ? `<i class="btn uil-check fs-6 btn-success"></i>` : `<i class="btn uil-times fs-6 btn-danger"></i>`;
+                        }
+                    },
+                    {
+                        data: 'id', title: 'İşlemler', render: (data) => {
+                            return `<a onclick="updateUser(${data}, this)" title="Düzenle" href="#">
+                                    <i class="bi bi-pencil" style="color: blue; font-size 1.2em;"></i>
+                                    </a>
+                                    <a onclick="deleteUser(${data}, this)" title="Sil" href="#">
+                                    <i class="bi bi-trash" style="color: red; font-size: 1.2em;"></i>
+                                    </a>`;
+                        }
+                    }
+                ]
+            });
+        });
+
+        // Kullanıcı Silme Fonksiyonu
+        function deleteUser(userId, button) {
+            if (confirm("Silmek istediğinize emin misiniz?")) {
+                $.ajax({
+                    url: '/User/Delete',
+                    type: 'POST',
+                    data: { id: userId },
+                    success: () => {
+                        let row = $(button).parent().parent();
+                        DataTable.row(row).remove().draw(false);
+                    }
+                });
+            }
+        }
+
+        // Kullanıcı Güncelleme Fonksiyonu
+        function updateUser(userId, button) {
+            $.ajax({
+                url: '/User/GetById',
+                type: 'POST',
+                data: { id: userId },
+                success: (res) => {
+                    $("#modal").modal("show");
+                    $("#txtUsername").val(res.name);
+                    $("#txtPassword").val(res.password);
+                    $("#ddlIsAdmin").val(res.isAdmin ? 1 : 0);
+                    $("#modalTitle").text("Kullanıcı Düzenle");
+                    $("#btnSave").text("Güncelle").off().click(() => {
+                        res.name = $("#txtUsername").val();
+                        res.password = $("#txtPassword").val();
+                        res.isAdmin = $("#ddlIsAdmin").val() == 1 ? true : false;
+
+                        $.ajax({
+                            url: '/User/Update',
+                            type: 'POST',
+                            data: res,
+                            success: () => {
+                                let row = $(button).parent().parent();
+                                DataTable.row(row).data(res).draw(false);
+                                $("#modal").modal("hide");
+                            }
+                        });
+                    });
+                }
+            });
+        }
+    </script>
+}
