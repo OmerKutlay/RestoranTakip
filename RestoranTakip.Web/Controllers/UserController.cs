@@ -5,6 +5,7 @@ using RestoranTakip.Business.Abstract;
 using RestoranTakip.Models;
 using System.Security.Claims;
 using System.Security.Principal;
+using RestoranTakip.Business.Concrete;
 
 namespace RestoranTakip.Web.Controllers
 {
@@ -70,9 +71,16 @@ namespace RestoranTakip.Web.Controllers
             return Ok(_userService.Delete(id));
         }
 
-        public IActionResult GettAll()
+       
+        public IActionResult GetAll()
         {
             return Json(new { data = _userService.GetAll() });
+        }
+
+        [HttpPost]
+        public IActionResult GetById(int id)
+        {
+            return Ok(_userService.GetById(id));
         }
     }
 }
