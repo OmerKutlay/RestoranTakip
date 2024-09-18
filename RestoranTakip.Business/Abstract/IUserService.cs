@@ -11,6 +11,7 @@ namespace RestoranTakip.Business.Abstract
     {
         AppUser Add(AppUser appuser);
         AppUser Update(AppUser appuser);
+        AppUser GetById(int id);
         bool Delete(int UserId);
         AppUser CheckUser(string username, string password);
         IQueryable<AppUser> GetAll();
