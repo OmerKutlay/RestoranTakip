@@ -34,25 +34,25 @@ namespace RestoranTakip.Web.Controllers
             AppUser appUser = _userService.CheckUser(user.Name, user.Password);
             if (appUser != null)
             {
-                List<Claim> claims = new List<Claim>();
-                claims.Add(new Claim(ClaimTypes.NameIdentifier, appUser.Id.ToString()));
-                claims.Add(new Claim(ClaimTypes.GivenName, appUser.Name));
+                List<Claim> claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.NameIdentifier, appUser.Id.ToString()),
+            new Claim(ClaimTypes.GivenName, appUser.Name),
+            new Claim(ClaimTypes.Role, appUser.IsAdmin ? "Admin" : "User")
+        };
 
-                claims.Add(new Claim(ClaimTypes.Role, appUser.IsAdmin ? "Admin" : "User"));
-
-                ClaimsIdentity identity = new ClaimsIdentity(claims,CookieAuthenticationDefaults.AuthenticationScheme);
+                ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-
                 await HttpContext.SignInAsync(new ClaimsPrincipal(identity));
 
-
-                return RedirectToAction("Index", "Home");
+                return Json(new { success = true });
             }
             else
             {
-                return View();
+                return Json(new { success = false, message = "Geçersiz kullanıcı adı veya şifre." });
             }
         }
+
         [HttpPost]
         public IActionResult Add(AppUser user)
         {
