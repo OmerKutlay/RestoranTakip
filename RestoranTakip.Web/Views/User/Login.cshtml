@@ -1,0 +1,59 @@
+﻿<div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-gradient-success text-white">
+                <div class="row">
+                    <div class="col-12">
+                        <box-icon name="lock-alt" color="white" size="sm"></box-icon> Giriş Yap
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="mb-3 row">
+                    <label class="form-label">Kullanıcı Adı:</label>
+                    <input type="text" id="txtUsername" placeholder="Kullanıcı adınızı girin" class="form-control" required />
+                </div>
+                <div class="mb-3 row">
+                    <label class="form-label">Şifre:</label>
+                    <input type="password" id="txtPassword" placeholder="Şifrenizi girin" class="form-control" required />
+                </div>
+                <button type="button" id="btnLogin" class="btn btn-primary w-100">Giriş Yap</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(() => {
+            // Giriş butonuna tıklama işlemi
+            $("#btnLogin").click(() => {
+                $("#txtUsername").val();
+                $("#txtPassword").val();
+
+                // Giriş için AJAX isteği
+                $.ajax({
+                    url: '/User/Login',
+                    type: 'POST',
+                    data: {
+                        Name: $("#txtUsername").val(),
+                        Password: $("#txtPassword").val()
+                    },
+                    success: (res) => {
+                        if (res.success) {
+                            window.location.href = '/'; // Başarı durumunda yönlendir
+                        } else {
+                            console.error("Giriş başarısız:", res.message);
+                            alert("Giriş başarısız. Lütfen bilgilerinizi kontrol edin.");
+                        }
+                    },
+                    error: (xhr, status, error) => {
+                        console.error("Giriş sırasında bir hata oluştu:", error);
+                        alert("Giriş sırasında bir hata oluştu. Lütfen tekrar deneyin.");
+                    }
+                });
+
+            });
+        });
+    </script>
+}
