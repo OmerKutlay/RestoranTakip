@@ -19,6 +19,7 @@ namespace RestoranTakip.Business.Configuration
             services.AddScoped<ITableService, TableService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IStatusService, StatusService>();
         }
         public static void RepositoryDI(this IServiceCollection services)
         {
