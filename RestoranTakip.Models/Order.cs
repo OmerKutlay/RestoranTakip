@@ -14,6 +14,8 @@ namespace RestoranTakip.Models
         public virtual AppUser AppUser { get; set; }
         public int TableId { get; set; }
         public virtual Table Table { get; set; }
+        public int StatusId { get; set; }
+        public virtual Status Status { get; set; }
         public ICollection<OrderDetail> OrderDetails { get; set; }
        
     }
