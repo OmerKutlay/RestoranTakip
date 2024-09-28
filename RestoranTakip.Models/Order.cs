@@ -8,7 +8,7 @@ namespace RestoranTakip.Models
 {
     public class Order:BaseModel
     {
-        public decimal TotalAmount { get; set; }
+        public decimal TotalPrice { get; set; }
         public DateTime OrderDate { get; set; }
         public int AppUserId { get; set; }
         public virtual AppUser AppUser { get; set; }
