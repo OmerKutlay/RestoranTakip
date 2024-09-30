@@ -17,35 +17,23 @@ namespace RestoranTakip.Web.Controllers
         [HttpGet]
         public IActionResult GetAllByOrderId(int orderId)
         {
-            var orderDetails = _orderDetailService.GetAllByOrderId(orderId);
-            return Json(new { data = orderDetails });
+            return Ok(new { data = _orderDetailService.GetAllByOrderId(orderId) });
         }
 
         [HttpPost]
-        public IActionResult Add([FromBody] OrderDetail orderDetail)
+        public IActionResult Add(OrderDetail orderDetail)
         {
-            if (orderDetail == null)
-                return BadRequest("Geçersiz veri");
-
-            var addedOrderDetail = _orderDetailService.Add(orderDetail);
-            return Ok(addedOrderDetail);
+            return Ok(_orderDetailService.Add(orderDetail));
         }
         [HttpPost]
-        public IActionResult Update([FromBody] OrderDetail orderDetail)
+        public IActionResult Update(OrderDetail orderDetail)
         {
-            if (orderDetail == null)
-                return BadRequest("Geçersiz veri");
-
-            var updatedOrderDetail = _orderDetailService.Update(orderDetail);
-            return Ok(updatedOrderDetail);
+            return Ok(_orderDetailService.Update(orderDetail));
         }
         [HttpPost]
         public IActionResult Delete(int id)
         {
-            bool isDeleted = _orderDetailService.Delete(id);
-            if (!isDeleted)
-                return NotFound("OrderDetail bulunamadı");
-
+            _orderDetailService.Delete(id);
             return Ok();
         }
 
