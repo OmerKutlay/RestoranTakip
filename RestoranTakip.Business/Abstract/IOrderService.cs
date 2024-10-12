@@ -13,7 +13,8 @@ namespace RestoranTakip.Business.Abstract
         Order Update(Order order, List<OrderDetail> orderDetails);
         Order UpdateDetails(int orderId, List<OrderDetail> orderDetails);
         bool Delete(int orderId);
-        ICollection<Order> GetAll(int tableId);
+        ICollection<Order> GetAllByTable(int tableId);
+        IQueryable<Order> GetAll();
         Order GetById(int orderId);
     }
 }
