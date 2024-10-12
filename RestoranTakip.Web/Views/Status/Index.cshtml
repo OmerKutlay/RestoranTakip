@@ -45,7 +45,7 @@
         var DataTable = "";
 
         $(document).ready(() => {
-            // Durum Ekleme Butonu
+           
             $("#btnAdd").click(() => {
                 $("#modal").modal("show");
                 $("#btnSave").text("Kaydet");
@@ -67,7 +67,6 @@
                 });
             });
 
-            // DataTable Ayarları
             DataTable = $("#tblStatus").DataTable({
                 ajax: '/Status/GetAll',
                 columns: [
@@ -88,7 +87,7 @@
             });
         });
 
-        // Durum Silme Fonksiyonu
+       
         function deleteStatus(statusId, button) {
             if (confirm("Silmek istediğinize emin misiniz?")) {
                 $.ajax({
@@ -103,7 +102,7 @@
             }
         }
 
-        // Durum Güncelleme Fonksiyonu
+      
         function updateStatus(statusId, button) {
             $.ajax({
                 url: '/Status/GetById',

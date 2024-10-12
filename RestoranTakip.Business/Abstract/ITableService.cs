@@ -14,6 +14,7 @@ namespace RestoranTakip.Business.Abstract
         Table GetById(int id);
         bool Delete(int TableId);
         IQueryable<Table> GetAll();
+        IQueryable<Table> GetFreeTables();
 
     }
 }

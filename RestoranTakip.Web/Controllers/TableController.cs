@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RestoranTakip.Business.Abstract;
 using RestoranTakip.Business.Concrete;
 using RestoranTakip.Models;
@@ -6,6 +7,7 @@ using System.Security.Claims;
 
 namespace RestoranTakip.Web.Controllers
 {
+    [Authorize]
     public class TableController : Controller
     {
         private readonly ITableService _tableService;
@@ -23,6 +25,10 @@ namespace RestoranTakip.Web.Controllers
         public IActionResult GetAll()
         {
             return Json(new { data = _tableService.GetAll() });
+        }
+        public IActionResult GetFreeTables()
+        {
+            return Json(new { data = _tableService.GetFreeTables() });
         }
 
         [HttpPost]

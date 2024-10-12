@@ -1,4 +1,5 @@
-﻿using RestoranTakip.Business.Abstract;
+﻿using Microsoft.EntityFrameworkCore;
+using RestoranTakip.Business.Abstract;
 using RestoranTakip.Models;
 using RestoranTakip.Repository.Shared.Abstract;
 using System;
@@ -37,10 +38,15 @@ namespace RestoranTakip.Business.Concrete
         {
             return _productRepository.GetAll(p => !p.IsDeleted);
         }
-
         public Product GetById(int id)
         {
             return _productRepository.GetById(id);
+        }
+
+
+        public Product GetPriceById(int id)
+        {
+            return _productRepository.GetFirstOrDefault(p => p.Id == id);
         }
 
         public Product Update(Product  product)

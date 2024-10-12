@@ -1,9 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using RestoranTakip.Business.Abstract;
+using RestoranTakip.Business.Concrete;
 using RestoranTakip.Models;
 
 namespace RestoranTakip.Web.Controllers
 {
+    [Authorize]
     public class OrderController : Controller
     {
         private readonly IOrderService _orderService;
@@ -17,10 +21,14 @@ namespace RestoranTakip.Web.Controllers
         {
             return View();
         }
-
-        public IActionResult GetAll(int tableId)
+        public IActionResult GetAll()
         {
-            return Json(new { data = _orderService.GetAll(tableId) });
+            return Json(new { data = _orderService.GetAll() });
+        }
+
+        public IActionResult GetAllByTable(int tableId)
+        {
+            return Json(new { data = _orderService.GetAllByTable(tableId) });
         }
 
         [HttpPost]
@@ -30,10 +38,20 @@ namespace RestoranTakip.Web.Controllers
         }
 
         [HttpPost]
+        public IActionResult GetById(int id)
+        {
+            var order = _orderService.GetById(id);
+            
+            return Ok(order);
+        }
+
+
+        [HttpPost]
         public IActionResult Update(Order order, List<OrderDetail> orderDetails)
         {
             return Ok(_orderService.Update(order, orderDetails));
         }
+
 
         [HttpPost]
         public IActionResult Delete(int id)

@@ -26,12 +26,12 @@
 @section Scripts {
     <script>
         $(document).ready(() => {
-            // Giriş butonuna tıklama işlemi
+            
             $("#btnLogin").click(() => {
                 $("#txtUsername").val();
                 $("#txtPassword").val();
 
-                // Giriş için AJAX isteği
+                
                 $.ajax({
                     url: '/User/Login',
                     type: 'POST',
@@ -41,7 +41,7 @@
                     },
                     success: (res) => {
                         if (res.success) {
-                            window.location.href = '/'; // Başarı durumunda yönlendir
+                            window.location.href = '/'; 
                         } else {
                             console.error("Giriş başarısız:", res.message);
                             alert("Giriş başarısız. Lütfen bilgilerinizi kontrol edin.");

@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RestoranTakip.Business.Abstract;
 using RestoranTakip.Models;
 
 namespace RestoranTakip.Web.Controllers
 {
+    [Authorize]
     public class StatusController : Controller
     {
 

@@ -44,5 +44,10 @@ namespace RestoranTakip.Business.Concrete
         {
             return _tableRepository.Update(table);
         }
+
+        public IQueryable<Table> GetFreeTables()
+        {
+            return _tableRepository.GetAll(t => t.IsDeleted == false).Where(t => t.IsOccupied == false);
+        }
     }
 }

@@ -26,12 +26,10 @@ namespace RestoranTakip.Business.Concrete
 
         public OrderDetail Add(OrderDetail orderDetail)
         {
-            orderDetail.TotalAmount = orderDetail.ProductPrice * orderDetail.Quantity;
             return _orderDetailRepository.Add(orderDetail);
         }
         public OrderDetail Update(OrderDetail orderDetail)
         {
-            orderDetail.TotalAmount = orderDetail.ProductPrice * orderDetail.Quantity;
             return _orderDetailRepository.Update(orderDetail);
         }
         public bool Delete(int id)
