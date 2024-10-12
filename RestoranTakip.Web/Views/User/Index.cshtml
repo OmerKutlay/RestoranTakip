@@ -56,7 +56,7 @@
         var DataTable = "";
 
         $(document).ready(() => {
-            // Yeni Kullanıcı Ekleme Butonu
+            
             $("#btnAdd").click(() => {
                 $("#modal").modal("show");
                 $("#btnSave").text("Kaydet");
@@ -82,7 +82,7 @@
                 });
             });
 
-            // DataTable Ayarları
+           
             DataTable = $("#tblUser").DataTable({
                 ajax: '/User/GetAll',
                 columns: [
@@ -108,7 +108,7 @@
             });
         });
 
-        // Kullanıcı Silme Fonksiyonu
+      
         function deleteUser(userId, button) {
             if (confirm("Silmek istediğinize emin misiniz?")) {
                 $.ajax({
@@ -123,7 +123,7 @@
             }
         }
 
-        // Kullanıcı Güncelleme Fonksiyonu
+        
         function updateUser(userId, button) {
             $.ajax({
                 url: '/User/GetById',

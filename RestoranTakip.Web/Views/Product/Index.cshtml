@@ -49,7 +49,7 @@
         var DataTable = "";
 
         $(document).ready(() => {
-            // Ürün Ekleme Butonu
+           
             $("#btnAdd").click(() => {
                 $("#modal").modal("show");
                 $("#btnSave").text("Kaydet");
@@ -73,7 +73,7 @@
                 });
             });
 
-            // DataTable Ayarları
+            
             DataTable = $("#tblProduct").DataTable({
                 ajax: '/Product/GetAll',
                 columns: [
@@ -96,7 +96,7 @@
             });
         });
 
-        // Ürün Silme Fonksiyonu
+       
         function deleteProduct(productId, button) {
             if (confirm("Silmek istediğinize emin misiniz?")) {
                 $.ajax({
@@ -111,7 +111,7 @@
             }
         }
 
-        // Ürün Güncelleme Fonksiyonu
+        
         function updateProduct(productId, button) {
             $.ajax({
                 url: '/Product/GetById',

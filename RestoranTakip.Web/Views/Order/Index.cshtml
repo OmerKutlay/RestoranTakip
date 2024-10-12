@@ -1,0 +1,327 @@
+﻿@using System.Security.Claims
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-gradient-success text-white  d-flex">
+                <div class="col-11  fs-3 text-white">Sipariş Listesi</div>
+                <div class="col-1 fs-3">
+                    <a href="#" id="btnAdd" class="btn btn-success"><i class="uil uil-plus me-2"></i>Yeni Sipariş</a>
+                </div>
+            </div>
+            <div class="card-body">
+                <table id="tblOrders" class="table table-bordered table-striped table-hover"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3 row" style="display: none;">
+                    <label class="form-label">Kullanıcı Adı: </label>
+                    <input type="text" id="txtUserName" placeholder="Kullanıcı adı otomatik doldurulacak" class="form-control" readonly />
+                </div>
+                <div class="mb-3 row">
+                    <label class="form-label">Masa</label>
+                    <select class="form-select" id="ddlTable"></select>
+                </div>
+                <div id="productContainer">
+                    <div class="mb-3 row product-row">
+                        <label class="form-label">Ürünler</label>
+                        <select class="form-select ddlProduct"></select>
+                        <input type="number" class="form-control txtQuantity mt-2" placeholder="Adet" required />
+                        <button type="button" class="btn btn-danger mt-2 remove-product">Kaldır</button>
+                    </div>
+                </div>
+                <button type="button" id="btnAddProduct" class="btn btn-primary mt-3">Ürün Ekle</button>
+                <div class="mb-3 row">
+                    <label class="form-label">Toplam Tutar: </label>
+                    <input type="text" id="txtTotalAmount" placeholder="Toplam tutar otomatik hesaplanacak" class="form-control" readonly />
+                </div>
+
+
+                <div class="mb-3 row">
+                    <label class="form-label">Durum</label>
+                    <select class="form-select" id="ddlStatus"></select>
+                </div>
+                <div class="mb-3 row" style="display: none;>
+                    <label class="form-label">Toplam Tutar: </label>
+                    <input type="text" id="txtTotalAmount" placeholder="Toplam tutar otomatik hesaplanacak" class="form-control" readonly />
+                </div>
+                <input type="hidden" id="hiddenAppUserId" value="@User.FindFirst(ClaimTypes.NameIdentifier)?.Value" />
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                <button type="button" id="btnSave" class="btn btn-primary">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var DataTable = "";
+        $(document).ready(() => {
+            DataTable = $("#tblOrders").DataTable({
+                ajax: '/Order/GetAll',
+                columns: [
+                    { data: 'id', title: 'ID' },
+                    { data: 'appUser.name', title: 'Kullanıcı' },
+                    { data: 'table.name', title: 'Masa' },
+                    { data: 'status.name', title: 'Durum' },
+                    { data: 'totalAmount', title: 'Toplam Tutar' },
+                    {
+                        data: 'orderDetails',
+                        title: 'Sipariş İçeriği',
+                        render: function (data) {
+                            let details = "";
+                            data.forEach(detail => {
+                                details += `${detail.product.name} (${detail.quantity})<br>`;
+                            });
+                            return details;
+                        }
+                    },
+                    {
+                        data: 'id', title: 'İşlemler', render: (data) => {
+                            return `<a onclick="updateOrder(${data},this)" title="Düzenle" class="btn uil-pen fs-6 btn-primary"></a> 
+                                    <a title="Sil" onclick="deleteOrder(${data},this)" class="btn uil-trash-alt fs-6 btn-danger"></a>`
+                        }
+                    }
+                ]
+            });
+
+            $('#btnAdd').on('click', function () {
+                $('#modalTitle').text('Yeni Sipariş');
+                $('#modal').modal('show');
+
+
+                $('#productContainer').empty();
+
+                $('#btnAddProduct').off('click');
+                $('#txtTotalAmount').val("0");
+
+
+                $('#btnAddProduct').on('click', () => {
+                    const productRow = `
+                    <div class="mb-3 row product-row">
+                        <label class="form-label">Ürünler</label>
+                        <select class="form-select ddlProduct"></select>
+                        <input type="number" class="form-control txtQuantity mt-2" placeholder="Adet" required />
+                        <button type="button" class="btn btn-danger mt-2 remove-product">Kaldır</button>
+                    </div>
+                `;
+                    $('#productContainer').append(productRow);
+                    fillProducts(); 
+                    updateTotalAmount(); 
+                });
+
+                
+                $('#productContainer').on('click', '.remove-product', function () {
+                    $(this).closest('.product-row').remove();
+                    updateTotalAmount(); 
+                });
+
+                
+                $('#productContainer').on('change', '.ddlProduct, .txtQuantity', function () {
+                    updateTotalAmount(); 
+                });
+
+                
+                function updateTotalAmount() {
+                    let totalAmount = 0;
+                    $('#productContainer .product-row').each(function () {
+                        const productId = $(this).find('.ddlProduct').val();
+                        const quantity = $(this).find('.txtQuantity').val();
+
+                        if (productId && quantity) {
+                           
+                            getProductPriceById(productId)
+                                .then(productPrice => {
+                                    totalAmount += productPrice * quantity;
+                                    $('#txtTotalAmount').val(totalAmount);
+                                })
+                                .catch(error => {
+                                    console.error(error);
+                                });
+                        }
+                    });
+                }
+
+                fillTables();
+                fillProducts();
+                fillStatuses();
+
+                $("#btnSave").off().click(async () => {
+                    let appUserId = $("#hiddenAppUserId").val();
+                    let order = {
+                        name: "Order",
+                        tableId: $("#ddlTable").val(),
+                        statusId: $("#ddlStatus").val(),
+                        appUserId: appUserId,
+                        orderDetails: []
+                    };
+
+                    if (order.tableId === "0" || order.statusId === "0" || !appUserId) {
+                        alert("Lütfen tüm alanları doldurun!");
+                        return;
+                    }
+
+                   
+                    const productRows = $('#productContainer .product-row');
+                    for (let row of productRows) {
+                        let productId = $(row).find('.ddlProduct').val();
+                        let quantity = $(row).find('.txtQuantity').val();
+
+                        try {
+                            let productPrice = await getProductPriceById(productId);
+                            order.orderDetails.push({
+                                productId: productId,
+                                quantity: quantity,
+                                productPrice: productPrice
+                            });
+                        } catch (error) {
+                            alert("Ürün fiyatı alınırken bir hata oluştu: " + error);
+                            return; 
+                        }
+                    }
+
+                    order.totalAmount = order.orderDetails.reduce((sum, detail) => sum + detail.productPrice * detail.quantity, 0);
+
+                    $.ajax({
+                        url: '/Order/Add',
+                        type: 'POST',
+                        data: { order: order, orderDetails: order.orderDetails },
+                        success: (res) => {
+                            reloadDataTable();
+                            $("#modal").modal("hide");
+                        },
+                        error: (xhr) => {
+                            console.error("Hata oluştu:", xhr.responseText);
+                            alert('Hata oluştu: ' + xhr.responseText);
+                        }
+                    });
+                });
+
+            });
+        });
+
+        function reloadDataTable() {
+            DataTable.ajax.reload(null, false); 
+        }
+
+        function deleteOrder(orderId, button) {
+            if (confirm("Silmek istediğinize emin misiniz?")) {
+                $.ajax({
+                    url: '/Order/Delete',
+                    type: 'POST',
+                    data: { id: orderId },
+                    success: () => {
+                        let row = $(button).closest('tr');
+                        reloadDataTable();
+                    }
+                });
+            }
+        }
+
+
+
+
+
+
+
+       
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        function fillTables() {
+            $.ajax({
+                url: '/Table/GetFreeTables',
+                type: 'GET',
+                success: (res) => {
+                    $("#ddlTable").empty();
+                    res.data.forEach(item => {
+                        $("#ddlTable").append(new Option(item.name, item.id));
+                    });
+                }
+            });
+        }
+
+        function fillProducts() {
+            $.ajax({
+                url: '/Product/GetAll',
+                type: 'GET',
+                success: (res) => {
+                    
+                    $('.product-row .ddlProduct').each(function () {
+                        const dropdown = $(this);
+                        dropdown.empty(); 
+                        res.data.forEach(item => {
+                            dropdown.append(new Option(item.name, item.id));
+                        });
+                    });
+                },
+                error: (xhr) => {
+                    console.error("Ürünler alınamadı:", xhr.responseText);
+                }
+            });
+        }
+
+
+        function fillStatuses() {
+            $.ajax({
+                url: '/Status/GetAll',
+                type: 'GET',
+                success: (res) => {
+                    $("#ddlStatus").empty();
+                    res.data.forEach(item => {
+                        $("#ddlStatus").append(new Option(item.name, item.id));
+                    });
+                }
+            });
+        }
+
+        function getProductPriceById(productId) {
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    url: '/Product/GetPriceById',
+                    type: 'POST',  
+                    data: { id: productId },
+                    success: (res) => {
+                        if (res && res.price) {
+                            resolve(res.price);
+                        } else {
+                            reject("Geçerli bir ürün fiyatı alınamadı.");
+                        }
+                    },
+                    error: (err) => {
+                        reject("Ürün fiyatı alınırken bir hata oluştu.");
+                    }
+                });
+            });
+        }
+    </script>
+}
+

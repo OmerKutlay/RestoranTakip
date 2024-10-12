@@ -6,6 +6,7 @@ using RestoranTakip.Models;
 using System.Security.Claims;
 using System.Security.Principal;
 using RestoranTakip.Business.Concrete;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RestoranTakip.Web.Controllers
 {
@@ -17,7 +18,7 @@ namespace RestoranTakip.Web.Controllers
         {
             _userService = userService;
         }
-
+        [Authorize]
         public ActionResult Index()
         {
             return View();
@@ -52,31 +53,31 @@ namespace RestoranTakip.Web.Controllers
                 return Json(new { success = false, message = "Geçersiz kullanıcı adı veya şifre." });
             }
         }
-
+        [Authorize]
         [HttpPost]
         public IActionResult Add(AppUser user)
         {
             return Ok(_userService.Add(user));
         }
-
+        [Authorize]
         [HttpPost]
         public IActionResult Update(AppUser user)
         {
             return Ok(_userService.Update(user));
         }
-
+        [Authorize]
         [HttpPost]
         public IActionResult Delete(int id)
         {
             return Ok(_userService.Delete(id));
         }
 
-       
+        [Authorize]
         public IActionResult GetAll()
         {
             return Json(new { data = _userService.GetAll() });
         }
-
+        [Authorize]
         [HttpPost]
         public IActionResult GetById(int id)
         {

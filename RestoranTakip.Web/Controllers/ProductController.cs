@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RestoranTakip.Business.Abstract;
 using RestoranTakip.Models;
 
 namespace RestoranTakip.Web.Controllers
 {
+    [Authorize]
     public class ProductController : Controller
     {
         private readonly IProductService _productService;
@@ -36,9 +38,23 @@ namespace RestoranTakip.Web.Controllers
 
         [HttpPost]
         public IActionResult GetById(int id)
-            {  
-                return Ok(_productService.GetById(id)); 
+        {
+            return Ok(_productService.GetById(id));
+        }
+
+        [HttpPost]
+        public IActionResult GetPriceById(int id)
+        {
+            var product = _productService.GetById(id);
+
+            if (product == null)
+            {
+                return NotFound("Ürün bulunamadı");
             }
+
+            return Ok(new { price = product.Price }); 
+        }
+
 
         [HttpPost]
         public IActionResult Update(Product product)

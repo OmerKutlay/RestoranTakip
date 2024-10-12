@@ -46,7 +46,6 @@
 
         $(document).ready(() => {
 
-            // Yeni masa ekleme işlemi
             $("#btnAdd").click(() => {
                 $("#modal").modal("show");
                 $("#btnSave").text("Kaydet");
@@ -70,7 +69,7 @@
                 });
             });
 
-            // DataTable yapılandırması
+            
             DataTable = $("#tblTables").DataTable({
                 ajax: '/Table/GetAll',
                 columns: [
@@ -92,7 +91,7 @@
             });
         });
 
-        // Masa silme işlemi
+        
            function deleteTable(tableId, button) {
             if (confirm("Silmek istediğinize emin misiniz?")) {
                 $.ajax({
@@ -107,7 +106,7 @@
             }
         }
 
-        // Masa düzenleme işlemi
+        
         function updateTable(tableId, button) {
             $.ajax({
                 url: '/Table/GetById',
