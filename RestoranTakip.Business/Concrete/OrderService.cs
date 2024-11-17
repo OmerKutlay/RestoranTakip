@@ -13,10 +13,12 @@ namespace RestoranTakip.Business.Concrete
     public class OrderService : IOrderService
     {
         private readonly IRepository<Order> _orderRepository;
+        private readonly IRepository<Table> _tableRepository;
 
-        public OrderService(IRepository<Order> orderRepository)
+        public OrderService(IRepository<Order> orderRepository, IRepository<Table> tableRepository)
         {
             _orderRepository = orderRepository;
+            _tableRepository = tableRepository;
         }
 
         public Order Add(Order order, List<OrderDetail> orderDetails)
@@ -27,6 +29,14 @@ namespace RestoranTakip.Business.Concrete
                 item.OrderId = order.Id;
             }
             order.OrderDetails = orderDetails;
+
+            var table = _tableRepository.GetById(order.TableId);
+            if (table != null)
+            {
+                table.IsOccupied = true;
+                _tableRepository.Update(table);
+            }
+
             _orderRepository.Update(order);
             return order;
         }
