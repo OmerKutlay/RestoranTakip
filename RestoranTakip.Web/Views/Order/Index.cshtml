@@ -55,7 +55,6 @@
                     <input type="text" id="txtTotalAmount" placeholder="Toplam tutar otomatik hesaplanacak" class="form-control" readonly />
                 </div>
                 <input type="hidden" id="hiddenAppUserId" value="@User.FindFirst(ClaimTypes.NameIdentifier)?.Value" />
-
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
@@ -231,30 +230,92 @@
         }
 
 
+        function updateOrder(orderId, button) {
+            $.ajax({
+                url: 'Order/GetById',
+                type: 'POST',
+                data: { id: orderId },
+                success: (res) => {
+                    $('#modal').modal("show");
+                    $('#txtorderName').val(res.name);
+                    $("#modalTitle").text("Siparişi Düzenle");
 
+                    fillTables(() => {
+                        $("#ddlTable").val(res.tableId);
+                    });
+                    fillStatuses(() => {
+                        $("#ddlStatus").val(res.statusId);
+                    });
 
+                    $('#productContainer').empty(); 
+                    res.orderDetails.forEach(detail => {
+                        const productRow = `
+                            <div class="mb-3 row product-row">
+                                <label class="form-label">Ürünler</label>
+                                <select class="form-select ddlProduct"></select>
+                                <input type="number" class="form-control txtQuantity mt-2" value="${detail.quantity}" placeholder="Adet" required />
+                                <button type="button" class="btn btn-danger mt-2 remove-product">Kaldır</button>
+                            </div>`;
+                        $('#productContainer').append(productRow);
+                    });
 
+                    
+                    $('#productContainer .product-row').each((index, row) => {
+                        const dropdown = $(row).find('.ddlProduct');
+                        dropdown.val(res.orderDetails[index].productId);
+                    });
 
+                   
+                    $('#txtTotalAmount').val(res.totalAmount);
 
-       
-        
+                   
+                    $("#btnSave").text("Güncelle").off().click(() => {
+                        res.name = $("#txtorderName").val();
 
+                      
+                        let updatedOrder = {
+                            id: res.id,
+                            name: res.name,
+                            tableId: $("#ddlTable").val(),
+                            statusId: $("#ddlStatus").val(),
+                            orderDetails: []
+                        };
 
+                        
+                        $('#productContainer .product-row').each((index, row) => {
+                            const productId = $(row).find('.ddlProduct').val();
+                            const quantity = $(row).find('.txtQuantity').val();
+                            updatedOrder.orderDetails.push({
+                                productId: productId,
+                                quantity: quantity,
+                            });
+                        });
 
+                        updatedOrder.totalAmount = updatedOrder.orderDetails.reduce((sum, detail) => sum + (detail.productPrice || 0) * detail.quantity, 0);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+                        
+                        $.ajax({
+                            url: 'Order/Update',
+                            type: 'POST',
+                            data: { order: updatedOrder },
+                            success: () => {
+                                let satir = $(button).closest('tr');
+                                DataTable.row(satir).data(updatedOrder).draw(false);
+                                $("#modal").modal("hide");
+                            },
+                            error: (xhr) => {
+                                console.error("Hata oluştu:", xhr.responseText);
+                                alert("Sipariş güncellenirken bir hata oluştu.");
+                            }
+                        });
+                    });
+                },
+                error: (xhr) => {
+                    console.error("Veri alınırken hata oluştu:", xhr.responseText);
+                    alert("Sipariş verisi alınırken bir hata oluştu.");
+                }
+            });
+        }
 
         function fillTables() {
             $.ajax({
