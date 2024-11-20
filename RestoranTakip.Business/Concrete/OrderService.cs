@@ -43,9 +43,27 @@ namespace RestoranTakip.Business.Concrete
 
         public bool Delete(int orderId)
         {
-            _orderRepository.Delete(orderId);
+            var order = _orderRepository.GetById(orderId);
+            if (order == null) return false;
+
+            _orderRepository.Delete(orderId); 
+
+            
+            var activeOrdersForTable = _orderRepository.GetAll(o => o.TableId == order.TableId && !o.IsDeleted).Any();
+
+            if (!activeOrdersForTable) 
+            {
+                var table = _tableRepository.GetById(order.TableId);
+                if (table != null)
+                {
+                    table.IsOccupied = false;   
+                    _tableRepository.Update(table);
+                }
+            }
+
             return true;
         }
+
 
         public ICollection<Order> GetAllByTable(int tableId)
         {
