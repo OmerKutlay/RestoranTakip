@@ -1,8 +1,8 @@
-Restoran Takip
+Restoran Takip:
 
 Restoran Takip, restoranların sipariş ve müşteri yönetimini kolaylaştırmak amacıyla geliştirilmiş bir .NET yazılımıdır.
 
-Özellikler
+Özellikler:
 
 Sipariş Yönetimi: Müşteri siparişlerinin alınması, takibi ve güncellenmesi.
 Müşteri Yönetimi: Müşteri bilgileri ve sipariş geçmişinin kaydedilmesi.
@@ -11,7 +11,7 @@ Yönetici ve Normal Kullanıcı Yönetimi: Admin ve normal kullanıcı profiller
 
 
 
-Kullanılan Teknolojiler
+Kullanılan Teknolojiler:
 
 - **Backend**:
   - ASP.NET Core  
@@ -25,7 +25,7 @@ Kullanılan Teknolojiler
   - Katmanlı Mimari (Layered Architecture)  
 
 
-Kurulum
+Kurulum:
 Bu projeyi yerel makinenize klonlayın:
 
 bash
@@ -45,6 +45,6 @@ Yeni bir branch oluşturun.
 Değişikliklerinizi yapıp commit edin.
 Pull Request gönderin.
 
-İletişim
+İletişim :
 Sorularınız veya önerileriniz için lütfen OmerKutlay ile iletişime geçin.
 
