@@ -28,8 +28,6 @@ Kullanılan Teknolojiler:
 Kurulum:
 Bu projeyi yerel makinenize klonlayın:
 
-bash
-Kodu kopyala
 git clone https://github.com/OmerKutlay/RestoranTakip.git
 Gerekli bağımlılıkları yükleyin ve projeyi derleyin.
 
